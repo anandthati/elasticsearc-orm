@@ -16,12 +16,13 @@ function Connection(opts) {
     EventEmitter.call(this);
     const self = this;
     const entities = new Map();
+    const TIMEOUT = config.get('timeout')
     const BASE_URL = opts.url || `http://${opts.domain}:${opts.port}/`;
 
     let testConnection = async () => {
         let body = await request({
             'url': BASE_URL,
-            'timeout': 1500
+            'timeout': TIMEOUT
         });
         config.set('version', buildVersion(body.version.number));
     };
