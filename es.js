@@ -16,7 +16,7 @@ function Connection(opts) {
     EventEmitter.call(this);
     const self = this;
     const entities = new Map();
-    const BASE_URL = `http://${opts.domain}:${opts.port}/`;
+    const BASE_URL = opts.url || `http://${opts.domain}:${opts.port}/`;
 
     let testConnection = async () => {
         let body = await request({
@@ -63,7 +63,9 @@ Connection.prototype = new EventEmitter();
 
 const ES = (opts) => {
     if (!opts.domain || !opts.port) {
-        throw new Error("opts params is invalide");
+        if (!opts.url) {
+            throw new Error("opts params is invalid");
+        }
     }
     let conn = new Connection(opts);
     return conn;
