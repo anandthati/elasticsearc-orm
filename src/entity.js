@@ -4,7 +4,7 @@ const UrlBuilder = require('./uri-builder/urlBuilder.js');
 const Condition = require('./esCondition.js'),
     Query = require('./esQuery.js'),
     Aggs = require('./esAggs.js');
-module.exports = function(name, opts, mappings = {}, settings) {
+module.exports = function (name, opts, mappings = {}, settings) {
     const self = this;
     //Condition.call(this);
     const DOMAIN = config.get('domain'),
@@ -113,6 +113,8 @@ module.exports = function(name, opts, mappings = {}, settings) {
                 'body': JSON.stringify(params)
             });
         }
+
+        exists = true
     };
 
     const buildAggs = () => {
