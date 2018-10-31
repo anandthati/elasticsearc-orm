@@ -115,6 +115,7 @@ module.exports = function (name, opts, mappings = {}, settings) {
         }
 
         exists = true
+        dbMappings = mappings
     };
 
     const buildAggs = () => {
