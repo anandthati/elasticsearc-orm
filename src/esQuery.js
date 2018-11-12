@@ -2,12 +2,13 @@ const request = require('../util/request.js');
 const Condition = require('./esCondition.js'),
     Aggs = require('./esAggs.js');
 const UrlBuilder = require('./uri-builder/urlBuilder.js');
-module.exports = function(BASE_URL, INDEX, TYPE) {
+module.exports = function (BASE_URL, INDEX, TYPE) {
     const urlBuilder = new UrlBuilder(BASE_URL, INDEX, TYPE);
     Condition.call(this);
     this.sortList = [];
     this.aggsList = [];
     this.sourceList = undefined;
+    this.highlight = undefined;
     const reset = () => {
         this.mustList = [];
         this.shouldList = [];
@@ -18,6 +19,7 @@ module.exports = function(BASE_URL, INDEX, TYPE) {
         this.count = 0;
         this.offset = undefined;
         this.limit = undefined;
+        this.highlightedFields = undefined;
     };
 
     const buildAggs = () => {
@@ -49,6 +51,9 @@ module.exports = function(BASE_URL, INDEX, TYPE) {
         if (this.aggsList.length > 0) {
             body.aggs = buildAggs();
         }
+        if (this.highlightedFields !== undefined) {
+            body.highlight = this.highlightedFields
+        }
         if (options.slice) {
             body.slice = options.slice;
         }
@@ -78,6 +83,10 @@ module.exports = function(BASE_URL, INDEX, TYPE) {
             throw new Error('from parameter is invalid');
         }
         this.offset = from;
+        return this;
+    };
+    this.highlight = (highlight) => {
+        this.highlightedFields = highlight;
         return this;
     };
     this.size = (size) => {
